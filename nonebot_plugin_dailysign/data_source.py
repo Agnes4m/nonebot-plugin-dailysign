@@ -1,20 +1,19 @@
 from datetime import date
 
 from nonebot.log import logger
-from nonebot.adapters.onebot.v11 import Message, MessageSegment
 
-from .models import DailySign
+from nene.utils_.models import DailySign
 
 
-async def get_sign_in(user_id: int, group_id: int) -> Message:
-    msg = Message()
+async def get_sign_in(user_id: int, group_id: int):
+    msg: str = ""
     last_sign = await DailySign.get_last_sign(user_id, group_id)
     # 判断是否已签到
     today = date.today()
     logger.debug(f"last_sign: {last_sign}")
     logger.debug(f"today: {today}")
     if today == last_sign:
-        msg += Message("你今天已经签到了，不要贪心噢。")
+        msg = "你今天已经签到了，不要贪心噢。"
         return msg
 
     # 签到名次
@@ -30,6 +29,5 @@ async def get_sign_in(user_id: int, group_id: int) -> Message:
     msg_txt += f"获得金币：+{data.today_gold} (总金币：{data.all_gold})\n"
     msg_txt += f"累计签到次数：{data.sign_times}\n"
     msg_txt += f"连续签到次数：{data.streak}\n"
-    msg += MessageSegment.text(msg_txt)
-
+    msg += msg_txt
     return msg
