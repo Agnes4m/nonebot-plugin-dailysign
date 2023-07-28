@@ -1,14 +1,14 @@
-from nonebot import on_command, on_fullmatch
-from nonebot.adapters import Message
 from nonebot.log import logger
+from nonebot.adapters import Message
 from nonebot.params import CommandArg
 from nonebot.plugin import PluginMetadata
+from nonebot import on_command, on_fullmatch
 
-from nene.utils_.config import Config
-from nene.utils_.event import MessageEvent_, S
 from nene.utils_.usrinfo import U
+from nene.utils_.config import Config
+from nene.utils_.event import S, MessageEvent_
 
-from .data_source import bind_login, check_login_msg, get_sign_in
+from .data_source import bind_login, get_sign_in, check_login_msg
 
 __plugin_meta__ = PluginMetadata(
     name="nonebot_plugin_dailysign",
@@ -28,6 +28,7 @@ check_bind = on_command("登录信息", aliases={"绑定信息"}, priority=5, bl
 @sign.handle()
 async def _(event: MessageEvent_):
     user_id = await U.get_user_id(event)
+    logger.info(user_id)
     if not user_id:
         return
     logger.debug(f"用户 {user_id} 签到")
